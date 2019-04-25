@@ -21,6 +21,7 @@ public class MainList extends AppCompatActivity {
     String[] mobileArray = {"Kartuzy", "Żukowo"};
 
     ListView listView ;
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +31,13 @@ public class MainList extends AppCompatActivity {
         toolbar.setTitle("Zbiory");
         setSupportActionBar(toolbar);
 
-        SQLiteDatabase db = openOrCreateDatabase("TREES",MODE_PRIVATE,null);
+        db = openOrCreateDatabase("TREES",MODE_PRIVATE,null);
         ArrayList<String> arrTblNames = new ArrayList<String>();
         Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
 
         if (c.moveToFirst()) {
             while ( !c.isAfterLast() ) {
-                arrTblNames.add( c.getString( c.getColumnIndex("name")) );
+                    arrTblNames.add( c.getString( c.getColumnIndex("name")) );
                 c.moveToNext();
             }
         }
@@ -68,6 +69,27 @@ public class MainList extends AppCompatActivity {
                 startActivity(new Intent(MainList.this, AddAlbum.class));
             }
         });
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        ArrayList<String> arrTblNames = new ArrayList<String>();
+        Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        if (c.moveToFirst()) {
+            while ( !c.isAfterLast() ) {
+                arrTblNames.add( c.getString( c.getColumnIndex("name")) );
+                c.moveToNext();
+            }
+        }
+        listView = (ListView) findViewById(R.id.list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, arrTblNames);
+        listView.setAdapter(adapter);
+
+        listView.invalidateViews();
+
     }
 
     @Override
