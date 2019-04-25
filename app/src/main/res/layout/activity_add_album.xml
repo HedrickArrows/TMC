@@ -28,23 +28,31 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
-        android:layout_marginTop="60dp"/>
+        android:hint="Nazwa zbioru..."
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="30dp"/>
 
-    <Button
-        android:id="@+id/buttonDone"
-        android:layout_width="200dp"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:text="Done
-" />
+        android:weightSum="2">
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="200dp"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="201dp"
-        android:layout_height="wrap_content"
-        android:text="Cancel" />
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:text="Anuluj"  />
+
+        <Button
+            android:id="@+id/buttonDone"
+            android:layout_width="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Dodaj" />
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

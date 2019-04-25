@@ -1,11 +1,13 @@
 package com.example.michal.tmc;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 
 public class AddTree extends AppCompatActivity {
 
@@ -16,6 +18,7 @@ public class AddTree extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Dodaj drzewo...");
         setSupportActionBar(toolbar);
+
 
     }
 
