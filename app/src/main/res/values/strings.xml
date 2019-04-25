@@ -2,4 +2,6 @@
     <string name="app_name">TMC</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_tree_list">TreeList</string>
+    <string name="title_activity_add_tree">AddTree</string>
+    <string name="title_activity_add_album">AddAlbum</string>
 </resources>
