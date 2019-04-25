@@ -12,8 +12,15 @@ public class TreeList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle bundle = getIntent().getExtras();
+        String message = bundle.getString("message");
+
         setContentView(R.layout.activity_tree_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
+
+        toolbar.setTitle("Zbiór: " + message);
+
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);

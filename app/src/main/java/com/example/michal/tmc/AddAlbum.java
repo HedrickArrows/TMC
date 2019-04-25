@@ -2,6 +2,7 @@ package com.example.michal.tmc;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 public class AddAlbum extends AppCompatActivity {
 
