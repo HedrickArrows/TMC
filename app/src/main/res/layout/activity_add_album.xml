@@ -22,12 +22,29 @@
 
     <include layout="@layout/content_add_album" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <EditText
+        android:id="@+id/albumName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:layout_marginTop="60dp"/>
+
+    <Button
+        android:id="@+id/buttonDone"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:text="Done
+" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="200dp"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="201dp"
+        android:layout_height="wrap_content"
+        android:text="Cancel" />
 
 </android.support.design.widget.CoordinatorLayout>
