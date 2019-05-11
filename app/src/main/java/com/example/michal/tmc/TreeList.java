@@ -1,17 +1,22 @@
 package com.example.michal.tmc;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class TreeList extends AppCompatActivity {
 
-
+    ListView listView ;
+    SQLiteDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +30,25 @@ public class TreeList extends AppCompatActivity {
         toolbar.setTitle("Zbiór: " + message);
 
         setSupportActionBar(toolbar);
+
+        db = openOrCreateDatabase("TREES",MODE_PRIVATE,null);
+        ArrayList<String> arrTblNames = new ArrayList<String>();
+        //db.execSQL("INSERT INTO " + message.toString() +" (LON, LAT, IMAGE) values ('1','2', 'test')");
+        Cursor c = db.rawQuery("SELECT * FROM " + message.toString()+";", null);
+
+        if (c.moveToFirst()) {
+            while ( !c.isAfterLast() ) {
+                arrTblNames.add( c.getString( c.getColumnIndex("ID")) );
+                c.moveToNext();
+            }
+        }
+
+        listView = (ListView) findViewById(R.id.listTree);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, arrTblNames);
+
+        listView.setAdapter(adapter);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
