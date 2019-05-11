@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -23,7 +24,11 @@ public class AddTree extends AppCompatActivity {
 
     Location location;
     String nazwa_zbioru;
+    String lon = "";
+    String lat = "";
+    String IMAGE = "";
     private LocationManager mLocationManager;
+    SQLiteDatabase db;
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
@@ -63,6 +68,7 @@ public class AddTree extends AppCompatActivity {
                 mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, mLocationListener);
             }
         }
+        db = openOrCreateDatabase("TREES",MODE_PRIVATE,null);
 
 
 
@@ -85,20 +91,14 @@ public class AddTree extends AppCompatActivity {
 
     }
 
+    public void addPhoto(View view)
+    {
+    }
+
     public void addToDb(View view)
     {
-        TextView latitude = findViewById(R.id.latitudeField);
-        TextView longitude = findViewById(R.id.longitudeField);
-
-
-        if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED ) {
-            location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if(location != null) {
-                latitude.setText(String.valueOf(location.getLatitude()));
-                longitude.setText(String.valueOf(location.getLongitude()));
-            }
-        }
-
+        db.execSQL("INSERT INTO " + nazwa_zbioru +" (LON, LAT, IMAGE) values ('"+ lon +"','"+lat +"', '"+ IMAGE +"test')");
+        finish();
 
     }
 
