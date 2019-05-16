@@ -23,7 +23,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.text.DateFormat;
 import android.os.Environment;
@@ -33,6 +37,8 @@ import java.io.ByteArrayOutputStream;
 import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.support.v4.content.FileProvider;
+
+import android.database.Cursor;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,6 +71,9 @@ public class AddTree extends AppCompatActivity {
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {}
     };
+
+    String[] columnNames;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +81,7 @@ public class AddTree extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         Bundle bundle = getIntent().getExtras();
         nazwa_zbioru = bundle.getString("message");
-        toolbar.setTitle(nazwa_zbioru + ": Dodaj drzewo:");
+        toolbar.setTitle(nazwa_zbioru + ": Dodaj drzewo");
         setSupportActionBar(toolbar);
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
@@ -92,9 +101,20 @@ public class AddTree extends AppCompatActivity {
         }
         db = openOrCreateDatabase("TREES",MODE_PRIVATE,null);
 
+        Cursor dbCursor = db.query(nazwa_zbioru, null, null, null, null, null, null);
+        columnNames = dbCursor.getColumnNames();
 
-
-
+        if(columnNames.length > 4){
+            LinearLayout layout = (LinearLayout) findViewById(R.id.textBoxContainer);
+            for(int i = 4; i< columnNames.length; i++) {
+                EditText e = new EditText(this);
+                e.setId(View.generateViewId());
+                e.setPadding(20, 20, 20, 20);
+                e.setMinimumWidth(500);
+                e.setHint(columnNames[i]);
+                layout.addView(e);
+            }
+        }
 
     }
 
@@ -178,7 +198,22 @@ public class AddTree extends AppCompatActivity {
     {
         byte[] imgBitmap = getBitmapAsByteArray(bmp);
 
-        db.execSQL("INSERT INTO " + nazwa_zbioru +" (LON, LAT, IMAGE) values ('"+ lon +"','"+lat +"', '"+ imgBitmap +"')");
+        String cols = "", vals = "";
+
+        if(columnNames.length > 4){
+            LinearLayout layout = (LinearLayout) findViewById(R.id.textBoxContainer);
+            for(int i = 4; i< columnNames.length; i++) {
+
+                cols += ", " + columnNames[i];
+
+                EditText text = (EditText) layout.getChildAt(i - 4);
+                vals += "', '" + text.getText();
+            }
+        }
+
+
+        db.execSQL("INSERT INTO " + nazwa_zbioru +" (LON, LAT, IMAGE" + cols +
+                ") values ('"+ lon +"','"+lat +"', '"+ imgBitmap + vals +"')");
         finish();
 
     }
