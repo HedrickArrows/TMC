@@ -161,20 +161,24 @@ public class AddTree extends AppCompatActivity {
         }
     }
 
-    private ImageView imageView;
+    private Bitmap bmp;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(imageBitmap);
+            bmp = (Bitmap) extras.get("data");
+            //imageView.setImageBitmap(imageBitmap);
+            ImageView img= (ImageView) findViewById(R.id.thumb);
+            img.setImageBitmap(bmp);
         }
     }
 
 
     public void addToDb(View view)
     {
-        db.execSQL("INSERT INTO " + nazwa_zbioru +" (LON, LAT, IMAGE) values ('"+ lon +"','"+lat +"', '"+ IMAGE +"')");
+        byte[] imgBitmap = getBitmapAsByteArray(bmp);
+
+        db.execSQL("INSERT INTO " + nazwa_zbioru +" (LON, LAT, IMAGE) values ('"+ lon +"','"+lat +"', '"+ imgBitmap +"')");
         finish();
 
     }
