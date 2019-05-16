@@ -213,7 +213,7 @@ public class AddTree extends AppCompatActivity {
 
 
         db.execSQL("INSERT INTO " + nazwa_zbioru +" (LON, LAT, IMAGE" + cols +
-                ") values ('"+ lon +"','"+lat +"', '"+ imgBitmap + vals +"')");
+                ") values ('"+ lon +"','"+lat +"', '"+ BitMapToString(bmp) + vals +"')");
         finish();
 
     }

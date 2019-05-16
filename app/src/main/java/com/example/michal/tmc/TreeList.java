@@ -87,8 +87,13 @@ public class TreeList extends AppCompatActivity {
                     while(curCSV.moveToNext())
                     {
                         //Which column you want to exprort
-                        String arrStr[] ={curCSV.getString(0),curCSV.getString(1), curCSV.getString(2), curCSV.getString(3)};
-                        csvWrite.writeNext(arrStr);
+                        String[] arr = new String[curCSV.getColumnCount()];
+                        for (int i=0; i< curCSV.getColumnCount(); i++)
+                        {
+                            arr[i] = curCSV.getString(i);
+                        }
+                        //String arrStr[] ={curCSV.getString(0),curCSV.getString(1), curCSV.getString(2), curCSV.getString(3)};
+                        csvWrite.writeNext(arr);
                     }
                     csvWrite.close();
                     curCSV.close();
