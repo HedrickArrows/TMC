@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +22,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -136,23 +138,7 @@ public class AddTree extends AppCompatActivity {
 
     }
 
-    String currentPhotoPath;
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
 
     public static byte[] getBitmapAsByteArray(Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -162,6 +148,9 @@ public class AddTree extends AppCompatActivity {
 
     static final int REQUEST_TAKE_PHOTO = 1;
 
+
+    private Uri imgUri;
+    private String photoDir;
 
     public void addPhoto(View view)
     {
@@ -176,27 +165,63 @@ public class AddTree extends AppCompatActivity {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 
+               // if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
+               // {
+               //     ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_TAKE_PHOTO);
+               //     if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
+               //         return;
+               //}
+
+                //File imagesFolder = new File(Environment.getExternalStorageDirectory(), "TMC_Images");
+                //imagesFolder.mkdirs();
+
+                //File photoFile = new File(imagesFolder, "JPEG_image"+
+                //        new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".jpg");
+                //photoDir = photoFile.getAbsolutePath();
+
+                takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                //FileProvider.getUriForFile(this,"com.example.android.fileprovider", photoFile);
+                //imgUri = FileProvider.getUriForFile(this,
+                //        BuildConfig.APPLICATION_ID + ".provider",
+                //        photoFile);
+                        // Uri.fromFile(photoFile);
+                //takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
+
+
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+
             }
         }
     }
 
     private Bitmap bmp;
+    private Bitmap fullImg;
+    final int thumbSize = 256;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            bmp = (Bitmap) extras.get("data");
-            //imageView.setImageBitmap(imageBitmap);
-            ImageView img= (ImageView) findViewById(R.id.thumb);
-            img.setImageBitmap(bmp);
+            try {
+                //fullImg = BitmapFactory.decodeStream(getContentResolver().openInputStream(imgUri));
+                //zakomentowana próba podejścia lepiej do zdjęcia, nie polecam
+                Bundle extras = data.getExtras();
+                bmp = (Bitmap) extras.get("data");
+
+                ImageView img = (ImageView) findViewById(R.id.thumb);
+                //bmp = ThumbnailUtils.extractThumbnail(fullImg,
+                //        thumbSize, thumbSize);
+                img.setImageBitmap(bmp);
+            } catch (Exception e){
+                Log.e("photo display", e.getMessage(),e);
+            }
         }
     }
 
 
     public void addToDb(View view)
     {
-        byte[] imgBitmap = getBitmapAsByteArray(bmp);
+        //byte[] imgBitmap = getBitmapAsByteArray(bmp);
 
         String cols = "", vals = "";
 
