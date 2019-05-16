@@ -4,13 +4,17 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class TreeList extends AppCompatActivity {
@@ -61,6 +65,49 @@ public class TreeList extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        FloatingActionButton fab2 = findViewById(R.id.saveToCsv);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isExternalStorageWritable();
+                File exportDir = new File(Environment.getExternalStorageDirectory(), "TMC");
+                if (!exportDir.exists())
+                {
+                    exportDir.mkdirs();
+                }
+
+                File file = new File(exportDir, message.toString()+".csv");
+                try
+                {
+                    file.createNewFile();
+                    CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+                    Cursor curCSV = db.rawQuery("SELECT * FROM "+message.toString(),null);
+                    csvWrite.writeNext(curCSV.getColumnNames());
+                    while(curCSV.moveToNext())
+                    {
+                        //Which column you want to exprort
+                        String arrStr[] ={curCSV.getString(0),curCSV.getString(1), curCSV.getString(2), curCSV.getString(3)};
+                        csvWrite.writeNext(arrStr);
+                    }
+                    csvWrite.close();
+                    curCSV.close();
+                }
+                catch(Exception sqlEx)
+                {
+                    Log.e("SaveToDb", sqlEx.getMessage(), sqlEx);
+                }
+
+            }
+        });
+    }
+
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
     }
 
 }

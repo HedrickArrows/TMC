@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -16,9 +18,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.io.ByteArrayOutputStream;
+import java.util.Dictionary;
 
 public class AddTree extends AppCompatActivity {
 
@@ -27,6 +33,7 @@ public class AddTree extends AppCompatActivity {
     String lon = "";
     String lat = "";
     String IMAGE = "";
+    Dictionary<String, String> dict;
     private LocationManager mLocationManager;
     SQLiteDatabase db;
     private final LocationListener mLocationListener = new LocationListener() {
@@ -73,6 +80,7 @@ public class AddTree extends AppCompatActivity {
 
 
 
+
     }
 
     public void setLocation(View view)
@@ -85,6 +93,8 @@ public class AddTree extends AppCompatActivity {
             if(location != null) {
                 latitude.setText(String.valueOf(location.getLatitude()));
                 longitude.setText(String.valueOf(location.getLongitude()));
+                lon = String.valueOf(location.getLongitude());
+                lat = String.valueOf(location.getLatitude());
             }
         }
 
@@ -97,7 +107,7 @@ public class AddTree extends AppCompatActivity {
 
     public void addToDb(View view)
     {
-        db.execSQL("INSERT INTO " + nazwa_zbioru +" (LON, LAT, IMAGE) values ('"+ lon +"','"+lat +"', '"+ IMAGE +"test')");
+        db.execSQL("INSERT INTO " + nazwa_zbioru +" (LON, LAT, IMAGE) values ('"+ lon +"','"+lat +"', '"+ IMAGE +"')");
         finish();
 
     }
@@ -118,6 +128,25 @@ public class AddTree extends AppCompatActivity {
                 });
         final AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public String BitMapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b=baos.toByteArray();
+        String temp= Base64.encodeToString(b, Base64.DEFAULT);
+        return temp;
+    }
+
+    public Bitmap StringToBitMap(String encodedString){
+        try {
+            byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
+        }
     }
 
 
