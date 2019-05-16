@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -97,6 +98,7 @@ public class TreeList extends AppCompatActivity {
                     }
                     csvWrite.close();
                     curCSV.close();
+                    Toast.makeText(getApplicationContext(), "Saved to csv in: "+file.getCanonicalPath(), Toast.LENGTH_LONG).show();
                 }
                 catch(Exception sqlEx)
                 {
