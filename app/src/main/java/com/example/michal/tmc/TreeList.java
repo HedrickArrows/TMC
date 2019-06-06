@@ -67,6 +67,18 @@ public class TreeList extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton fabMap = findViewById(R.id.showMap);
+        fabMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                //        .setAction("Action", null).show();
+                Intent intent = new Intent(TreeList.this, Map.class);
+                intent.putExtra("message", message);
+                startActivity(intent);
+            }
+        });
+
         FloatingActionButton fab2 = findViewById(R.id.saveToCsv);
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +103,12 @@ public class TreeList extends AppCompatActivity {
                         String[] arr = new String[curCSV.getColumnCount()];
                         for (int i=0; i< curCSV.getColumnCount(); i++)
                         {
+                            if(curCSV.getColumnName(i) == "zdjecie") {
+                                arr[i] = new String(curCSV.getBlob(i));
+                            }
+                            else {
                             arr[i] = curCSV.getString(i);
+                            }
                         }
                         //String arrStr[] ={curCSV.getString(0),curCSV.getString(1), curCSV.getString(2), curCSV.getString(3)};
                         csvWrite.writeNext(arr);

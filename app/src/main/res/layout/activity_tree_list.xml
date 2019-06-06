@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".TreeList">
 
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,6 +49,15 @@
         android:clickable="true"
         app:layout_anchor="@+id/include2"
         app:layout_anchorGravity="end|center"
+        app:srcCompat="@android:drawable/stat_sys_download" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/showMap"
+        android:layout_width="wrap_content"
+        android:layout_height="752dp"
+        android:clickable="true"
+        app:layout_anchor="@+id/include2"
+        app:layout_anchorGravity="bottom|center"
         app:srcCompat="@android:drawable/stat_sys_download" />
 
 </android.support.design.widget.CoordinatorLayout>
