@@ -238,7 +238,7 @@ public class AddTree extends AppCompatActivity {
 
 
         db.execSQL("INSERT INTO " + nazwa_zbioru +" (LON, LAT, IMAGE" + cols +
-                ") values ('"+ lon +"','"+lat +"', '"+ BitMapToString(bmp) + vals +"')");
+                ") values ('"+ lon +"','"+lat +"', '"+ imgBitmap + vals +"')");
         finish();
 
     }
@@ -265,13 +265,13 @@ public class AddTree extends AppCompatActivity {
         ByteArrayOutputStream baos=new  ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
         byte [] b=baos.toByteArray();
-        String temp= Base64.encodeToString(b, Base64.DEFAULT);
+        String temp= Base64.encodeToString(b, Base64.NO_WRAP);
         return temp;
     }
 
     public Bitmap StringToBitMap(String encodedString){
         try {
-            byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
+            byte [] encodeByte=Base64.decode(encodedString,Base64.NO_WRAP);
             Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
             return bitmap;
         } catch(Exception e) {
