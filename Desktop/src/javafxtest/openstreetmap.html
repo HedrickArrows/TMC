@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8" />
+ <script type="text/javascript" src="http://openlayers.org/api/2.11/OpenLayers.js"></script>
+ <script type="text/javascript" >
+  var myMap;
+   
+  var markers;
+    
+  function loadOpenLayers(){  
+   
+   myMap = new OpenLayers.Map("mymap", {});
+    
+
+    
+    var osmLayer = new OpenLayers.Layer.OSM("OpenStreetMap",
+                                           ["https://a.tile.openstreetmap.org/${z}/${x}/${y}.png", 
+                                            "https://b.tile.openstreetmap.org/${z}/${x}/${y}.png",
+                                            "https://c.tile.openstreetmap.org/${z}/${x}/${y}.png"],
+                                            {attribution: "&copy; <a href='http://www.openstreetmap.org/'>OpenStreetMap</a> and contributors, under an <a href='http://www.openstreetmap.org/copyright' title='ODbL'>open license</a>",
+                                            "tileOptions": { "crossOriginKeyword": null }});
+     
+   myMap.addLayer(osmLayer);
+   
+   markers = new OpenLayers.Layer.Markers( "Markers" );
+    myMap.addLayer(markers);
+ 
+   myMap.setCenter(new OpenLayers.LonLat(-122.349243, 47.651743));
+   myMap.zoomTo(6);   
+  } 
+  
+  function test(){
+      myMap.zoomTo(8);
+  }
+  
+  function add_marker(lon, lat){
+      var lonLat = new OpenLayers.LonLat( lon , lat )
+          .transform(
+            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+            myMap.getProjectionObject() // to Spherical Mercator Projection
+          );
+      markers.addMarker(new OpenLayers.Marker(lonLat));
+      
+       myMap.setCenter(lonLat);
+        myMap.zoomTo(17);
+  }
+  
+  function remove_markers(){
+      markers.clearMarkers();
+      
+  }
+  
+ </script>
+</head>
+<body onload="loadOpenLayers();">
+ <div id="mymap" style="width: 620px; height: 460px; border: 1px solid;">
+ </div>
+ 
+</body>
+</html>
