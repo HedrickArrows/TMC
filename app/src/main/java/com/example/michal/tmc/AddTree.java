@@ -221,7 +221,7 @@ public class AddTree extends AppCompatActivity {
 
     public void addToDb(View view)
     {
-        //byte[] imgBitmap = getBitmapAsByteArray(bmp);
+        byte[] imgBitmap = getBitmapAsByteArray(bmp);
 
         String cols = "", vals = "";
 
